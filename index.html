@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>运动会报名</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e0f7fa; /* 设置符合图片的背景色 */
+        }
+        .slider {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+        }
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slides img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        /* 圆点指示器 */
+        .indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+        }
+        .indicator div {
+            width: 10px;
+            height: 10px;
+            margin: 5px;
+            background-color: #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .indicator .active {
+            background-color: #4CAF50;
+        }
+        /* 报名按钮 */
+        .signup-button {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px; /* 调小按钮 */
+            font-size: 16px; /* 缩小字体 */
+            background-color: #81c784; /* 颜色更浅 */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            display: none; /* 默认隐藏，只有在第三张图片显示时才会显示 */
+        }
+        .signup-button.active {
+            display: block; /* 在第三张图片时显示 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slider">
+        <div class="slides">
+            <!-- 第一张宣传图片 -->
+            <img src="https://cuicancan.top/ydh.jpg" alt="宣传图片1">
+            <!-- 第二张宣传图片 -->
+            <img src="https://cuicancan.top/sg.jpg" alt="宣传图片2">
+            <!-- 第三张宣传图片 -->
+            <img src="https://cuicancan.top/bm.jpg" alt="宣传图片3">
+        </div>
+
+        <!-- 圆点指示器 -->
+        <div class="indicator">
+            <div class="dot" data-index="0"></div>
+            <div class="dot" data-index="1"></div>
+            <div class="dot" data-index="2"></div>
+        </div>
+
+        <!-- 报名按钮，默认在第三张图片中下方显示 -->
+        <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=aiFm1EPGSkOcLgV0SMF8vlph6aeSzZNJjMJSEpNjJ4ZUQ1dTSTNMSjExSVRUU0lLQ1VPSEVIT1IwVy4u&origin=QRCode" class="signup-button" id="signupButton">点击报名</a>
+    </div>
+
+    <script>
+        const slides = document.querySelector('.slides');
+        const dots = document.querySelectorAll('.dot');
+        const signupButton = document.getElementById('signupButton');
+        let currentIndex = 0;
+        let autoSlideInterval;
+        const totalSlides = dots.length;
+
+        // 点击指示器切换图片
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentIndex = index;
+                updateSlider();
+                clearInterval(autoSlideInterval); // 清除自动滑动
+            });
+        });
+
+        function updateSlider() {
+            slides.style.transform = `translateX(${-currentIndex * 100}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[currentIndex].classList.add('active');
+
+            // 如果是第三张图片，显示报名按钮
+            if (currentIndex === totalSlides - 1) {
+                signupButton.classList.add('active');
+            } else {
+                signupButton.classList.remove('active');
+            }
+        }
+
+        // 自动滑动功能
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                if (currentIndex < totalSlides - 1) {
+                    currentIndex++;
+                    updateSlider();
+                } else {
+                    clearInterval(autoSlideInterval); // 停止自动滑动
+                }
+            }, 3000); // 每3秒滑动一次
+        }
+
+        // 初始化显示第一个指示点为激活状态
+        dots[currentIndex].classList.add('active');
+        startAutoSlide(); // 开始自动滑动
+    </script>
+
+</body>
+</html>
